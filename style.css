@@ -1,0 +1,25 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.calculator-body {
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 250px;
+
+    /* DEBUG BORDERS */
+    border: 2px solid #FF0000;
+}
+
+button {
+    width: 48px;
+    height: auto;
+    aspect-ratio: 1;
+    
+    border: 2px solid #000000;
+    border-radius: 24px;
+    margin: 2px;
+}
