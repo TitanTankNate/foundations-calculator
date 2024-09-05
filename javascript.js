@@ -2,9 +2,12 @@
 let number1=0;
 let number2=0;
 let operation= "";
+let previousInput;
 
+let calcAcPressed = true;
 let decimalWasPressed = false;
 let secondOpPressed = false;
+let equalsPressed = false;
 
 let displayString = `${number1}`;
 const displayScreen = document.querySelector(".screen");
@@ -15,15 +18,15 @@ const displayScreen = document.querySelector(".screen");
 const allButtons = document.querySelectorAll("button");
 allButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        console.log(handleInput(displayString, button.className));
-        console.log(number1);
+        handleInput(button.className)
+        //console.log(handleInput(displayString, button.className));
+        //console.log(number1);
     });
 });
 
-function handleInput(displayStringInput, buttonName) {
-    // Read in current display screen text content
-    let displayStringArray = Array.from(displayStringInput);
-    
+
+
+function handleInput(buttonName) {
     // Input handler
     switch (buttonName) {
         // NUMERIC INPUTS
@@ -43,85 +46,83 @@ function handleInput(displayStringInput, buttonName) {
         case "8-button":
         case "9-button":
         case "0-button":
-            // If first input, clear "0" from display
-            if (number1 == 0) {
-                displayStringArray = [];
-                displayString=displayStringArray;
-                displayScreen.textContent=displayString;
-            };
-
-            // Add input to current display string
-            displayStringArray.push(buttonName[0]);
-            displayString=displayStringArray.join('');
-            
-            // Display input
-            displayScreen.textContent=displayString;
-
-            // Store input variable
-            number1 = parseFloat(displayString);
-
-            // Return button value
-            return buttonName[0];
-        
-        // FUNCTIONAL INPUTS
+            parseInput(buttonName[0]);
+            break;
         case "ac-button":
-            // Clear display
-            displayString="0";
-            displayScreen.textContent=displayString;
-            decimalWasPressed = false;
-            secondOpPressed = false;
-
-            // Set input variable to 0
-            number1 = 0;
-            break;
         case "del-button":
-            // Handle decimal reset
-            if (displayStringArray[displayStringArray.length-1] == ".") {
-                decimalWasPressed = false;
-            };
-
-            // Remove last character of string
-            let displayStringArrayDel = displayStringArray.splice(-1,1);
-
-            // Update current display string
-            displayString=displayStringArray.join('');
-            displayScreen.textContent=displayString;
-
-            // Store input variable
-            number1 = parseFloat(displayString);
-            break;
-        
-        // OPERATIONAL INPUTS
         case "plus-button":
-            operation="add";
-            detectSecondOpPress(secondOpPressed);
-            break;
+            parseInput("plus");
         case "minus-button":
-            operation="subtract";
-            detectSecondOpPress(secondOpPressed);
-            break;
         case "mult-button":
-            operation="multiply";
-            detectSecondOpPress(secondOpPressed);
-            break;
         case "div-button":
-            operation="divide";
-            detectSecondOpPress(secondOpPressed);
-            break;
     };
 
 };
 
-function detectSecondOpPress (boolean) {
-    // If first time pressed, do nothing and wait for second number
-    // If pressed for second time, perform operation on self
-    if (boolean) {
-        operateOnNum(operation,number1,number2);
+
+
+function passInputToDisplay(refreshState, ignoreInput, input) {
+    let displayStringArray = Array.from(displayString);         // Create an array for holding text input
+    const displayScreen = document.querySelector(".screen");    // Reference "display screen"
+    
+    // If refreshState is true, clear the array
+    if (refreshState) {
+        displayStringArray = [];                                // Clear the 0 from the string
+    }
+    
+    // If ignoreInput is true, do not push input keys to display
+    if (!ignoreInput) {
+        displayStringArray.push(input);                         // Add input to array
+    }
+
+    displayString = displayStringArray.join('');                // Create text string for display purposes
+    displayScreen.textContent = displayString;                  // Change text content to updated string
+};
+
+
+
+function parseInput(input) {
+    // let displayStringArray = Array.from(displayString);         // Create an array for holding text input
+    // const displayScreen = document.querySelector(".screen");    // Reference "display screen"
+
+    // Take input and...
+    // // If it is the first input after a refresh, clear the display and create a string.
+    if (calcAcPressed) {
+        calcAcPressed = false;                                  // Clear refresh state
+        passInputToDisplay(true, false, input);                 // Pass input to display
+        previousInput = input;                                  // Remember input for handling later
+        
     } else {
-        secondOpPressed = true;
-        number2=number1;
+        // // If the previous input was a digit, and current input is a digit, continue the string
+        let condition1 = (previousInput >= 0 && previousInput <= 9 || previousInput == ".");    // Previous input
+        let condition2 = (input >= 0 && input <= 9 || input == ".")                             // Current input
+        if (condition1) {
+            if (condition2) {
+                passInputToDisplay(false, false, input);            // Pass input to display
+                previousInput = input;                              // Remember input for handling later
+            
+            // // If the previous input was a digit, and current input is an operation, cls and remember operation
+            } else {
+                decimalWasPressed = false;                          // Allow decimal use again
+                passInputToDisplay(true, true, input);              // Pass input to display
+                operation = input;                                  // Remember input for handling later
+            };
+
+        // // If the previous input was an operation, and current input is a digit, create the new text string
+        // // (AC and DEL are exempt from this condition)
+        } else {
+            if (!(previousInput == "delete" || previousInput == "AC")) {
+
+            };
+            
+            
+        };
     };
-;}
+
+
+};
+
+
 
 function operateOnNum(operation,firstInput,secondInput=0) {
     let result;
