@@ -174,10 +174,7 @@ function parseInput(input) {
                         passInputToDisplay("result", true, result);
                     };
                     operation = input;
-                    number1 = parseFloat(displayString);
-                    
-                    // number1 = parseFloat(displayString);
-                    //passInputToDisplay("refresh", true, input);     // Pass input to display   
+                    number1 = parseFloat(displayString);  
                 };
                                    
                 previousInput = input;                              // Remember input for handling later
@@ -190,24 +187,41 @@ function parseInput(input) {
                 passInputToDisplay("refresh", false, input);
                 previousInput = input;
             
-            // // If the previous input was an operation, and current input is an operation, perform the operation
-            // // on the already-existing number
+            // // If the previous input was an operation...
             } else {
-                if(operation == "execute") {
-                    operation = input;
-                };
-
-                if(previousInput == "execute" && input != "execute") {
-                    
-                    previousInput = input;
-                    operation = input;
-                    // passInputToDisplay("refresh", true, input);
-                } else {
+                //... and current operation matches previous, then execute operation again
+                if(input == previousInput) {
+                    if(number2 == 0) {
+                        number2 = number1;
+                    };
                     result = calculate(number1, number2, operation);
                     number1 = result;
                     passInputToDisplay("result", true, result);
+                    previousInput = input;
+
+                //... otherwise, wait for new string of numbers
+                } else {
+                    operation = input;
                 };
-            } 
+                // if(operation == "execute") {
+                //     operation = input;
+                // };
+
+                // if(previousInput == "execute" && input != "execute") {
+                //     previousInput = input;
+                //     operation = input;
+                // } else {
+                //     operation = input;
+                //     if (number2 == 0){
+                //         number2 = number1;
+                //     };
+                //     result = calculate(number1, number2, operation);
+                //     number1 = result;
+                //     passInputToDisplay("result", true, result);
+                //     previousInput = input;
+                    
+                // };
+            }; 
         };
     };
 
@@ -231,20 +245,3 @@ function calculate (input1, input2, operation) {
 
 // MAIN PROGRAM LOOP
 displayScreen.textContent=displayString;
-
-
-
-
-// Accept user input
-// Store input into either
-// // numeric variable, or
-// // operator variable
-// Display that input on the "display"
-// First operator press
-// // When operator is pressed, either 
-// // 1) wait for number to perform operation, or
-// // 2) execute operation if button pressed again
-// // // Example:   2 followed by plus waits for another number
-// // //            2 followed by plus plus adds 2 to 2
-// Handle sequential inputs
-// // Pressing any operator displays intermediate result of operation
