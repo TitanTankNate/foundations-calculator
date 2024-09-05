@@ -4,6 +4,29 @@ body {
     box-sizing: border-box;
 }
 
+.calculator-top {
+    display: flex;
+
+    /* DEBUG BORDERS */
+    border: 2px solid #0000FF;
+}
+
+.screen {
+    display: flex;
+}
+
+.operation-indicators {
+    display: flex;
+}
+
+.left-indicators, .right-indicators {
+    display: flex;
+    flex-direction: column;
+
+    /* DEBUG BORDERS */
+    border: 2px solid #00FF00;
+}
+
 .calculator-body {
     display: flex;
     flex-wrap: wrap;
