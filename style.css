@@ -80,14 +80,17 @@ button {
 }
 
 .operation-indicators {
+    /* Display declarations */
     display: flex;
 
+    /* CBPM */
     border: 2px solid #000000;
     border-radius: 24px;
     margin: 2px;
 }
 
 .left-indicators, .right-indicators {
+    /* Display declarations */
     display: flex;
     flex-direction: column;
 }
@@ -103,7 +106,26 @@ button {
 }
 
 .ac-button, .equals-button {
+    /* Transforms and constraints */
     width: 154px;
     aspect-ratio: 2;
     
+}
+
+.ac-button, .del-button {
+    /* Font and color declarations */
+    background-color: #dda09a;
+}
+
+.div-button,
+.mult-button,
+.minus-button,
+.plus-button {
+    /* Font and color declarations */
+    background-color: #ffc70070;
+}
+
+.equals-button {
+    /* Font and color declarations */
+    background-color: #00A34460;
 }
